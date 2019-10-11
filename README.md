@@ -2,6 +2,20 @@
 Android 万能的Adapter for ListView,RecyclerView,GridView等，支持多种Item类型的情况。
 
 
+## 说明
+
+主要是对于androidx 的迁移
+适用于已有项目使用的这个框架,
+不好直接换其他库,
+毕竟api 不一样了,
+改起来复杂容易出问题
+
+
+listview 还可以使用原先的库,排除 android support 包即可,因为项目中并没有使用到 support包里面的类
+
+
+
+
 ## 引入
 
 ### ForRecyclerView
