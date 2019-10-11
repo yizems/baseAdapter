@@ -14,6 +14,13 @@ Android 万能的Adapter for ListView,RecyclerView,GridView等，支持多种Ite
 listview 还可以使用原先的库,排除 android support 包即可,因为项目中并没有使用到 support包里面的类
 
 
+```gradle
+
+
+//依赖于
+implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+```
 
 
 ## 引入
