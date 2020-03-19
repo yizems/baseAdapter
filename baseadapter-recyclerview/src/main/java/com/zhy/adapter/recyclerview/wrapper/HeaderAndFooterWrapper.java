@@ -100,7 +100,7 @@ public class HeaderAndFooterWrapper<T> extends RecyclerView.Adapter<RecyclerView
                     return layoutManager.getSpanCount();
                 }
                 if (oldLookup != null)
-                    return oldLookup.getSpanSize(position);
+                    return oldLookup.getSpanSize(position-getHeadersCount()-getFootersCount());
                 return 1;
             }
         });

@@ -1,13 +1,17 @@
 package com.zhy.adapter.recyclerview;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.zhy.adapter.recyclerview.base.ItemViewDelegate;
 import com.zhy.adapter.recyclerview.base.ItemViewDelegateManager;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.zhy.adapter.recyclerview.utils.WrapperUtils;
 
 import java.util.List;
 
@@ -40,12 +44,12 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         ItemViewDelegate itemViewDelegate = mItemViewDelegateManager.getItemViewDelegate(viewType);
         int layoutId = itemViewDelegate.getItemViewLayoutId();
         ViewHolder holder = ViewHolder.createViewHolder(mContext, parent, layoutId);
-        onViewHolderCreated(holder,holder.getConvertView());
+        onViewHolderCreated(holder, holder.getConvertView());
         setListener(parent, holder, viewType);
         return holder;
     }
 
-    public void onViewHolderCreated(ViewHolder holder,View itemView){
+    public void onViewHolderCreated(ViewHolder holder, View itemView) {
 
     }
 
@@ -65,7 +69,7 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
                     int position = viewHolder.getAdapterPosition();
-                    mOnItemClickListener.onItemClick(v, viewHolder , position);
+                    mOnItemClickListener.onItemClick(v, viewHolder, position);
                 }
             }
         });
@@ -84,6 +88,10 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (mItemViewDelegateManager.getItemViewDelegate(getItemViewType(position))
+                .getSpan() == ItemViewDelegate.SPAN_FULL) {
+            WrapperUtils.setFullSpan(holder);
+        }
         convert(holder, mDatas.get(position));
     }
 
@@ -112,10 +120,38 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         return mItemViewDelegateManager.getItemViewDelegateCount() > 0;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, RecyclerView.ViewHolder holder,  int position);
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
 
-        boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,  int position);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager) {
+            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+
+            final GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+
+            if (spanSizeLookup instanceof GridLayoutManager.DefaultSpanSizeLookup) {
+                gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        int span = mItemViewDelegateManager.getItemViewDelegate(getItemViewType(position)).getSpan();
+                        if (span == ItemViewDelegate.SPAN_FULL) {
+                            return gridLayoutManager.getSpanCount();
+                        }
+                        return span;
+                    }
+                });
+                gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
+            }
+        }
+    }
+
+
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, RecyclerView.ViewHolder holder, int position);
+
+        boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

@@ -3,6 +3,7 @@ package com.zhy.sample;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ public class MultiItemRvActivity extends AppCompatActivity
 {
     private RecyclerView mRecyclerView;
 
-    private LoadmoreWrapper mLoadMoreWrapper;
+//    private LoadmoreWrapper mLoadMoreWrapper;
     private List<ChatMessage> mDatas = new ArrayList<>();
 
 
@@ -34,34 +35,34 @@ public class MultiItemRvActivity extends AppCompatActivity
 
         mRecyclerView = (RecyclerView) findViewById(R.id.id_recyclerview);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
 
         mDatas.addAll(ChatMessage.MOCK_DATAS);
         ChatAdapterForRv adapter = new ChatAdapterForRv(this, mDatas);
 
-        mLoadMoreWrapper = new LoadmoreWrapper(adapter);
-        mLoadMoreWrapper.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.default_loading, mRecyclerView, false));
-        mLoadMoreWrapper.setOnLoadMoreListener(new LoadmoreWrapper.OnLoadMoreListener()
-        {
-            @Override
-            public void onLoadMoreRequested()
-            {
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean coming = Math.random() > 0.5;
-                        ChatMessage msg = null;
-                        msg = new ChatMessage(coming ? R.drawable.renma : R.drawable.xiaohei, coming ? "人马" : "xiaohei", "where are you " + mDatas.size(),
-                                null, coming);
-                        mDatas.add(msg);
-                        mLoadMoreWrapper.notifyDataSetChanged();
-
-                    }
-                }, 3000);
-            }
-        });
+//        mLoadMoreWrapper = new LoadmoreWrapper(adapter);
+//        mLoadMoreWrapper.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.default_loading, mRecyclerView, false));
+//        mLoadMoreWrapper.setOnLoadMoreListener(new LoadmoreWrapper.OnLoadMoreListener()
+//        {
+//            @Override
+//            public void onLoadMoreRequested()
+//            {
+//                new Handler().postDelayed(new Runnable()
+//                {
+//                    @Override
+//                    public void run()
+//                    {
+//                        boolean coming = Math.random() > 0.5;
+//                        ChatMessage msg = null;
+//                        msg = new ChatMessage(coming ? R.drawable.renma : R.drawable.xiaohei, coming ? "人马" : "xiaohei", "where are you " + mDatas.size(),
+//                                null, coming);
+//                        mDatas.add(msg);
+//                        mLoadMoreWrapper.notifyDataSetChanged();
+//
+//                    }
+//                }, 3000);
+//            }
+//        });
 
         adapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener()
         {
@@ -78,7 +79,7 @@ public class MultiItemRvActivity extends AppCompatActivity
                 return false;
             }
         });
-        mRecyclerView.setAdapter(mLoadMoreWrapper);
+        mRecyclerView.setAdapter(adapter);
     }
 
 

@@ -8,7 +8,7 @@ import com.zhy.sample.bean.ChatMessage;
 /**
  * Created by zhy on 16/6/22.
  */
-public class MsgComingItemDelagate implements ItemViewDelegate<ChatMessage>
+public class MsgComingItemDelagate extends ItemViewDelegate<ChatMessage>
 {
 
     @Override
@@ -29,5 +29,10 @@ public class MsgComingItemDelagate implements ItemViewDelegate<ChatMessage>
         holder.setText(R.id.chat_from_content, chatMessage.getContent());
         holder.setText(R.id.chat_from_name, chatMessage.getName());
         holder.setImageResource(R.id.chat_from_icon, chatMessage.getIcon());
+    }
+
+    @Override
+    public int getSpan() {
+        return SPAN_FULL;
     }
 }

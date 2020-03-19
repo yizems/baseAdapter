@@ -8,7 +8,7 @@ import com.zhy.sample.bean.ChatMessage;
 /**
  * Created by zhy on 16/6/22.
  */
-public class MsgSendItemDelagate implements ItemViewDelegate<ChatMessage>
+public class MsgSendItemDelagate extends ItemViewDelegate<ChatMessage>
 {
 
     @Override
