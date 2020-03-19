@@ -28,15 +28,6 @@ implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
 ### ForRecyclerView
 
-```
-compile 'com.zhy:base-rvadapter:3.0.3'
-```
-
-### ForListView
-
-```
-compile 'com.zhy:base-adapter:3.0.3'
-```
 
 
 ## 使用
